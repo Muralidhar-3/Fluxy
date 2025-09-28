@@ -3,7 +3,7 @@ import os
 
 # Database credentials - REPLACE THESE WITH YOUR ACTUAL SUPABASE DETAILS
 SUPABASE_PROJECT_REF = "uscdhsnzeqomoaqwtdne"  # Your project reference ID
-SUPABASE_PASSWORD = "Supabase8978#"     # Your database password
+SUPABASE_PASSWORD = "Supabase8978"     # Your database password
 SUPABASE_REGION = "ap-south-1"          # Your region
 
 # Properly encode the password for URL
