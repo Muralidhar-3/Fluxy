@@ -1,5 +1,5 @@
 import requests
-import pandas as pd
+from datetime import datetime
 from models import db, Announcement
 from config import NSE_API_URL, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
 import traceback
@@ -61,11 +61,14 @@ def fetch_nse_data(app):
                     
                     if date_str:
                         try:
-                            date = pd.to_datetime(date_str, errors="coerce")
-                            if pd.isna(date):
-                                date = datetime.now()
-                        except Exception:
-                            date = datetime.now()
+                              # Try parsing common NSE format (2025-09-27 17:07:02)
+                              date = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")
+                        except ValueError:
+                              try:
+                                    # If format differs (e.g. 27-Sep-2025 05:07:02 PM)
+                                    date = datetime.strptime(date_str, "%d-%b-%Y %I:%M:%S %p")
+                              except Exception:
+                                    date = datetime.now()
                     else:
                         date = datetime.now()
 
