@@ -17,6 +17,7 @@ import logging
 import requests
 import signal
 import sys
+import os
 
 # Setup logging
 logging.basicConfig(
@@ -37,6 +38,9 @@ class NSEMonitorService:
         self.last_fetch_time = None
         self.total_alerts_sent = 0
         
+    url = os.getenv("DATABASE_URL")
+    print("📡 Using DB URL:", url)
+    
     def find_working_database_url(self):
         """Find working database connection"""
         for i, url in enumerate(SUPABASE_CONNECTION_URLS, 1):
