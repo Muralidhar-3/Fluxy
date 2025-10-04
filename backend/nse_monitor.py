@@ -38,8 +38,8 @@ class NSEMonitorService:
         self.last_fetch_time = None
         self.total_alerts_sent = 0
         
-    url = os.getenv("DATABASE_URL")
-    print("📡 Using DB URL:", url)
+    # url = os.getenv("DATABASE_URL")
+    # print("📡 Using DB URL:", url)
     
     def find_working_database_url(self):
         """Find working database connection"""
@@ -50,6 +50,7 @@ class NSEMonitorService:
                     result = connection.execute(text("SELECT 1"))
                     result.fetchone()
                 logger.info(f"✅ Database format {i} works!")
+                print("📡 Using DB URL:", url)
                 return url
             except Exception:
                 continue
@@ -308,12 +309,13 @@ class NSEMonitorService:
                 return jsonify({"status": "fetch_triggered"})
             
             # Run Flask app
-            logger.info("🌐 Web interface available at: http://localhost:5001")
-            logger.info("📊 Status: http://localhost:5001/")
-            logger.info("🔄 Manual fetch: http://localhost:5001/force-fetch")
+            port = int(os.environ.get('PORT', 5001))  # Use Render's PORT or default to 5001
+            logger.info(f"🌐 Web interface available at: http://localhost:{port}")
+            logger.info(f"📊 Status: http://localhost:{port}/")
+            logger.info(f"🔄 Manual fetch: http://localhost:{port}/force-fetch")
             logger.info("⏹️  Press Ctrl+C to stop")
             
-            self.app.run(host='0.0.0.0', port=5001, debug=False, threaded=True)
+            self.app.run(host='0.0.0.0', port=port, debug=False, threaded=True)
             
         except Exception as e:
             logger.error(f"❌ Failed to start service: {e}")

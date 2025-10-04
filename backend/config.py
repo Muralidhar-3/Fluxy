@@ -22,10 +22,16 @@ SUPABASE_CONNECTION_URLS = [
     
     # Format 4: Connection pooling with SSL
     f"postgresql://postgres.{SUPABASE_PROJECT_REF}:{encoded_password}@aws-0-{SUPABASE_REGION}.pooler.supabase.com:6543/postgres?sslmode=require",
+
+    # Format 5: Render's DATABASE_URL format (if provided)
+    os.getenv("DATABASE_URL"),
 ]
 
+# Filter out None values from environment variables
+SUPABASE_CONNECTION_URLS = [url for url in SUPABASE_CONNECTION_URLS if url is not None]
+
 # Default to the first URL (will be tested in app.py)
-DATABASE_URL = SUPABASE_CONNECTION_URLS[0]
+DATABASE_URL = SUPABASE_CONNECTION_URLS[0] if SUPABASE_CONNECTION_URLS else None
 
 # Environment variable override
 if os.getenv("DATABASE_URL"):
